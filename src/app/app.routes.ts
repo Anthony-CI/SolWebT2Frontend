@@ -4,6 +4,8 @@ import { CategoryComponent } from './pages/category/category.component';
 import { PublisherEditComponent } from './pages/publisher/publisher-edit/publisher-edit.component';
 import { BookComponent } from './pages/book/book.component';
 import { BookEditComponent } from './pages/book/book-edit/book-edit.component';
+import { MascotaComponent } from './pages/mascota/mascota.component';
+import { MascotaEditComponent } from './pages/mascota/mascota-edit/mascota-edit.component';
 
 export const routes: Routes = [
   {
@@ -20,6 +22,14 @@ export const routes: Routes = [
       children: [
       { path: 'new', component: BookEditComponent }, // pages/boot/new
       { path: 'edit/:id', component: BookEditComponent }, // pages/book/edit/1
+    ],
+   },
+
+   { path: 'pages/mascota', 
+    component: MascotaComponent,
+      children: [
+      { path: 'new', component: MascotaEditComponent }, // pages/mascota/new
+      { path: 'edit/:id', component: MascotaEditComponent}, // pages/mascota/edit/1
     ],
    }
 ];

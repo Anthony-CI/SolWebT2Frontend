@@ -1,0 +1,56 @@
+<form class="example-container" *ngIf="form" [formGroup]="form" (submit)="operate()">
+    <div [hidden]="true">
+            <mat-form-field>
+                <input matInput placeholder="ID" formControlName="idMascota">
+            </mat-form-field>
+        </div>
+    
+        <mat-form-field>
+            <input matInput placeholder="Nombre" formControlName="nombre">
+    
+            <mat-error *ngIf="form.get('nombre')?.touched && form.get('nombre')?.hasError('required')">
+            El nombre es requerido
+            </mat-error>
+    
+        </mat-form-field>
+    
+    
+    
+        <mat-form-field>
+            <input matInput placeholder="especie" formControlName="especie">
+    
+            <mat-error *ngIf="form.get('especie')?.touched && form.get('especie')?.hasError('required')">
+            La especie es requerido
+            </mat-error>
+        </mat-form-field>
+    
+    
+        <mat-form-field>
+            <input matInput placeholder="edad" formControlName="edad">
+    
+            <mat-error *ngIf="form.get('edad')?.touched && form.get('edad')?.hasError('required')">
+            La edad es requerida
+            </mat-error>
+        </mat-form-field>
+    
+        <mat-form-field>
+            <input matInput placeholder="dueno" formControlName="dueno">
+    
+            <mat-error *ngIf="form.get('dueno')?.touched && form.get('dueno')?.hasError('required')">
+            El dueno es requerido
+            </mat-error>
+        </mat-form-field>
+ 
+    
+    
+    
+        <button mat-button type="submit">
+            <mat-icon>done</mat-icon>
+            <span>Done</span>
+        </button>
+    
+        <button mat-button type="button" routerLink="/pages/mascota">
+            <mat-icon>cancel</mat-icon>
+            <span>Cancel</span>
+        </button>
+    </form>
