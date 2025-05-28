@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
@@ -8,6 +8,7 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { switchMap } from 'rxjs';
 import { BookService } from '../../../services/book.service';
 import { Book } from '../../../model/book';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-book-edit',
@@ -18,11 +19,12 @@ import { Book } from '../../../model/book';
     MatIconModule,
     MatInputModule,
     RouterLink,
+    CommonModule,
   ],
   templateUrl: './book-edit.component.html',
   styleUrl: './book-edit.component.css'
 })
-export class BookEditComponent {
+export class BookEditComponent implements OnInit {
 form: FormGroup;
   id: number;
   isEdit: boolean;
@@ -36,9 +38,9 @@ form: FormGroup;
   ngOnInit(): void {
     this.form = new FormGroup({
       idBook: new FormControl(), // DECIA 0, pero generaba conflicto de transient value
-      title: new FormControl(''),
-      subtitle: new FormControl(''),
-      description: new FormControl(''),
+      title: new FormControl('',Validators.required),
+      subtitle: new FormControl('',Validators.required),
+      description: new FormControl('',Validators.required),
       idPublisher: new FormControl(''),
       idCategory: new FormControl(''),
     });
@@ -50,14 +52,15 @@ form: FormGroup;
     });
   }
 
+  //edicion
   initForm() {
     if (this.isEdit) {
       this.bookService.findById(this.id).subscribe((data) => {
         this.form = new FormGroup({
           idBook: new FormControl(data.idBook),
-          title: new FormControl(data.title),
-          subtitle: new FormControl(data.subtitle),
-          description: new FormControl(data.description),
+          title: new FormControl(data.title,Validators.required),
+          subtitle: new FormControl(data.subtitle,Validators.required),
+          description: new FormControl(data.description, Validators.required),
           idPublisher: new FormControl(data.idPublisher),
           idCategory: new FormControl(data.idCategory),
         });
@@ -65,7 +68,15 @@ form: FormGroup;
     }
   }
 
+  //antes de enviar
   operate() {
+
+    if (this.form.invalid) {
+    this.form.markAllAsTouched(); // muestra los errores
+    return;
+    }
+
+
     // console.log("operate!");
     const book: Book = new Book();
     book.idBook = this.form.value['idBook'];

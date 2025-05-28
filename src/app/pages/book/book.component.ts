@@ -13,6 +13,9 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { switchMap } from 'rxjs';
 import { Book } from '../../model/book';
 import { BookService } from '../../services/book.service';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { ConfirmDialogComponent } from './confirm-dialog.component';
+
 
 @Component({
   selector: 'app-book',
@@ -26,7 +29,8 @@ import { BookService } from '../../services/book.service';
       MatSortModule,
       MatButtonModule,
       RouterOutlet,
-      RouterLink
+      RouterLink,
+      MatDialogModule,
   ],
   templateUrl: './book.component.html',
   styleUrl: './book.component.css'
@@ -50,7 +54,9 @@ export class BookComponent {
   
     constructor(
       private bookService: BookService,
-      private _snackBar: MatSnackBar
+      private _snackBar: MatSnackBar,
+      private dialog: MatDialog
+
     ){}
     
   
@@ -83,6 +89,7 @@ export class BookComponent {
       this.dataSource.filter = e.target.value.trim();
     }
   
+    /*
     delete(id: number){
       this.bookService.delete(id)
         .pipe(switchMap( () => this.bookService.findAll()))
@@ -91,4 +98,22 @@ export class BookComponent {
           this.bookService.setMessageChange('DELETED!');
         });
     }
+    */
+   
+delete(id: number) {
+  const dialogRef = this.dialog.open(ConfirmDialogComponent);
+
+  dialogRef.afterClosed().subscribe(result => {
+    if (result) {
+      this.bookService.delete(id)
+        .pipe(switchMap(() => this.bookService.findAll()))
+        .subscribe(data => {
+          this.bookService.setBookChange(data);
+          this.bookService.setMessageChange('DELETED!');
+        });
+    }
+  });
+}
+
+
 }
